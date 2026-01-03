@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:weatherapp/additional_data.dart';
 import 'package:weatherapp/hourly_forecast.dart';
 import 'package:weatherapp/secrets.dart';
@@ -14,10 +15,11 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  late Future<Map<String, dynamic>?> weather;
   @override
   void initState() {
     super.initState();
-    getCurrentWeather();
+    weather = getCurrentWeather();
   }
 
   Future<Map<String, dynamic>?> getCurrentWeather() async {
@@ -51,14 +53,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              print("Refresh");
+              setState(() {});
             },
             icon: Icon(Icons.refresh),
           ),
         ],
       ),
       body: FutureBuilder(
-        future: getCurrentWeather(),
+        future: weather,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -134,33 +136,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 ),
 
                 const SizedBox(height: 16),
-                // SingleChildScrollView(
-                //   scrollDirection: Axis.horizontal,
-                //   child: Row(
-                //     children: [
-                //       for (int i = 0; i < 30; i++)
-                //         HourlyForecast(
-                //           icon:
-                //               data['list'][i + 1]['weather'][0]['main'] ==
-                //                       "Clouds" ||
-                //                   data['list'][i + 1]['weather'][0]['main'] ==
-                //                       "Rain"
-                //               ? Icons.cloud
-                //               : Icons.sunny,
-                //           time: data['list'][i + 1]['dt'].toString(),
 
-                //           temp: data['list'][i + 1]['main']['temp'].toString(),
-                //         ),
-                //     ],
-                //   ),
-                // ),
                 SizedBox(
                   height: 150,
                   child: ListView.builder(
                     itemCount: 5,
                     itemBuilder: (context, index) {
+                      final time = DateTime.parse(
+                        data['list'][index + 1]['dt_txt'],
+                      );
                       return HourlyForecast(
-                        time: data['list'][index + 1]['dt'].toString(),
+                        time: DateFormat('j').format(time),
                         temp: data['list'][index + 1]['main']['temp']
                             .toString(),
                         icon:
