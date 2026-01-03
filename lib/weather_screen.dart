@@ -46,7 +46,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Bhimavaram Weather App",
+          "Weather App",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
