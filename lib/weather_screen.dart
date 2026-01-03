@@ -129,41 +129,52 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 const SizedBox(height: 20),
 
                 const Text(
-                  "Weather Forecast",
+                  "Hourly Forecast",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
 
                 const SizedBox(height: 16),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      HourlyForecast(
-                        icon: Icons.cloud,
-                        time: "03:00",
-                        temp: "295 K",
-                      ),
-                      HourlyForecast(
-                        icon: Icons.thunderstorm,
-                        time: "06:00",
-                        temp: "292 K",
-                      ),
-                      HourlyForecast(
-                        icon: Icons.sunny,
-                        time: "09:00",
-                        temp: "298 K",
-                      ),
-                      HourlyForecast(
-                        icon: Icons.cloud,
-                        time: "12:00",
-                        temp: "301 K",
-                      ),
-                      HourlyForecast(
-                        icon: Icons.thunderstorm,
-                        time: "15:00",
-                        temp: "303 K",
-                      ),
-                    ],
+                // SingleChildScrollView(
+                //   scrollDirection: Axis.horizontal,
+                //   child: Row(
+                //     children: [
+                //       for (int i = 0; i < 30; i++)
+                //         HourlyForecast(
+                //           icon:
+                //               data['list'][i + 1]['weather'][0]['main'] ==
+                //                       "Clouds" ||
+                //                   data['list'][i + 1]['weather'][0]['main'] ==
+                //                       "Rain"
+                //               ? Icons.cloud
+                //               : Icons.sunny,
+                //           time: data['list'][i + 1]['dt'].toString(),
+
+                //           temp: data['list'][i + 1]['main']['temp'].toString(),
+                //         ),
+                //     ],
+                //   ),
+                // ),
+                SizedBox(
+                  height: 150,
+                  child: ListView.builder(
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return HourlyForecast(
+                        time: data['list'][index + 1]['dt'].toString(),
+                        temp: data['list'][index + 1]['main']['temp']
+                            .toString(),
+                        icon:
+                            data['list'][index + 1]['weather'][0]['main'] ==
+                                    "Clouds" ||
+                                data['list'][index + 1]['weather'][0]['main'] ==
+                                    "Rain"
+                            ? Icons.cloud
+                            : Icons.sunny,
+                      );
+                    },
+                    scrollDirection: Axis.horizontal,
+
+                    shrinkWrap: true,
                   ),
                 ),
                 const Text(
