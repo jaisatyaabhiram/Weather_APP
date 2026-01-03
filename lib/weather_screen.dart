@@ -66,6 +66,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
           if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           }
+          final data = snapshot.data!;
+          final curtemp = data['list'][0]['main']['temp'];
+          final currentSky = data['list'][0]['weather'][0]['main'];
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -93,7 +96,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           child: Column(
                             children: [
                               Text(
-                                "0 K",
+                                "$curtemp K",
                                 style: const TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
@@ -102,9 +105,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               const SizedBox(height: 16),
                               const Icon(Icons.cloud, size: 64),
                               const SizedBox(height: 16),
-                              const Text(
-                                "Rain",
-                                style: TextStyle(fontSize: 20),
+                              Text(
+                                "$currentSky",
+                                style: const TextStyle(fontSize: 20),
                               ),
                             ],
                           ),
