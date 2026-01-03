@@ -67,8 +67,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
             return Center(child: Text("Error: ${snapshot.error}"));
           }
           final data = snapshot.data!;
-          final curtemp = data['list'][0]['main']['temp'];
-          final currentSky = data['list'][0]['weather'][0]['main'];
+          final currentWeatherdata = data['list'][0];
+          final curtemp = currentWeatherdata['main']['temp'];
+          final currentSky = currentWeatherdata['weather'][0]['main'];
+          final humidity = currentWeatherdata['main']['humidity'];
+          final windSpeed = currentWeatherdata['wind']['speed'];
+          final pressure = currentWeatherdata['main']['pressure'];
+
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -103,7 +108,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              const Icon(Icons.cloud, size: 64),
+                              Icon(
+                                currentSky == "Clouds" || currentSky == "Rain"
+                                    ? Icons.cloud
+                                    : Icons.sunny,
+                                size: 64,
+                              ),
                               const SizedBox(height: 16),
                               Text(
                                 "$currentSky",
@@ -168,17 +178,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       AdditionalData(
                         icon: Icons.water_drop,
                         label: "Humidity",
-                        value: "80%",
+                        value: "$humidity %",
                       ),
                       AdditionalData(
                         icon: Icons.air,
                         label: "Wind Speed",
-                        value: "15 km/h",
+                        value: "$windSpeed m/s",
                       ),
                       AdditionalData(
                         icon: Icons.thermostat,
                         label: "Pressure",
-                        value: "1013 hPa",
+                        value: "$pressure hPa",
                       ),
                     ],
                   ),
