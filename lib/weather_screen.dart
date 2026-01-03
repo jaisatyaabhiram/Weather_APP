@@ -61,6 +61,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
+          if (snapshot.hasError){
+            return Center(child: Text("Error: ${snapshot.error}"));
+          }
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
