@@ -20,7 +20,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     getCurrentWeather();
   }
 
-  Future getCurrentWeather() async {
+  Future<Map<String, dynamic>?> getCurrentWeather() async {
     try {
       String city = "Bhīmavaram,IN";
       final res = await http.get(
@@ -28,10 +28,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
           'http://api.openweathermap.org/data/2.5/forecast?q=$city&APPID=$openweatherAPI',
         ),
       );
+
       final data = jsonDecode(res.body);
       if (data['cod'] != '200') {
         throw "Unexpected error occurred";
       }
+      return data;
     } catch (e) {
       throw e.toString();
     }
@@ -61,7 +63,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
-          if (snapshot.hasError){
+          if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           }
           return Padding(
